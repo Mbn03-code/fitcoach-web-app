@@ -1,199 +1,83 @@
-# gym - Web Application Final Project
+# FitCoach Fullstack
 
-## 1. Project Title
-FitCoach: Simple Workout Program Management Web Application
+A full-stack fitness coaching web application with authentication, landing page, user profiles, and Dockerized frontend/backend.
 
-## 2. Short Description
-FitCoach is a simple full-stack web application for managing workout programs between coaches and athletes. Guests can view public information such as the home page, coaches, and exercises. After registration, athletes can view their workout programs and record completed exercises. Coaches can create workout programs for athletes. Admin users can manage users, exercises, programs, and view a simple system summary.
+## Demo
 
-## 3. Main Roles
+Live Demo: Coming soon
+GitHub Repo: Coming soon
+Figma Design: [Add your Figma link here]
 
-### Guest
-- Can view the home page
-- Can view the public exercises list
-- Can register or login
+## Screenshots
 
-### Athlete
-- Can login to the system
-- Can view personal dashboard
-- Can view assigned workout programs
-- Can record completed workouts
-- Can only access personal data
+Screenshots will be added after the final UI implementation.
 
-### Coach
-- Can login to the system
-- Can manage exercises
-- Can create workout programs for athletes
-- Can view workout logs related to assigned programs
+Figma Design Preview: [Add your Figma link here]
 
-### Admin
-- Can access the admin panel
-- Can view and manage users
-- Can view, edit, and delete content created in the system
-- Can view system summary such as total users and total programs
+## Features
 
-## 4. Technology Stack
+* Responsive landing page for desktop and mobile
+* User sign up and login system
+* OTP verification for registration
+* Role-based user profiles
+* Athlete and coach profile forms
+* Dashboard connected to backend API
+* Frontend and backend running with Docker
+* SQLite database integration
 
-### Frontend
-- React + Vite
-- JavaScript / JSX
-- Tailwind CSS
-- Zod for form validation
-- React Hooks
+## Tech Stack
 
-### Backend
-- FastAPI
-- SQLAlchemy
-- SQLite database
-- JWT authentication
-- bcrypt password hashing
+Frontend: React, Vite, JavaScript, CSS, Tailwind CSS
+Backend: FastAPI, Python, SQLAlchemy
+Database: SQLite
+Tools: Docker, Docker Compose, Figma, GitHub
 
-## 5. Main Database Entities
+## My Role
 
-### User
-Stores main account information for all users.
+I designed the landing page, sign up page, and login page in Figma.
+I implemented the frontend pages using React and connected them to the backend APIs.
+I developed the backend authentication system with FastAPI.
+I created the database models and connected the project to SQLite.
+I also configured Docker to run both frontend and backend services together.
 
-### AthleteProfile
-Stores simple athlete information such as height, weight, goal, and level.
+## Installation
 
-### CoachProfile
-Stores simple coach information such as specialty, experience years, and bio.
-
-### Exercise
-Stores public workout exercises.
-
-### Program
-Stores workout programs created by coaches for athletes.
-
-### ProgramExercise
-Stores exercises inside each workout program.
-
-### WorkoutLog
-Stores completed workout records submitted by athletes.
-
-## 6. Main Features
-
-- User registration and login
-- Role-based access control
-- Athlete dashboard
-- Coach dashboard
-- Exercise CRUD
-- Workout program creation
-- Workout completion log
-- Admin panel
-- Frontend form validation
-- Backend input validation
-- Loading, error, and empty states
-- Responsive design
-
-## 7. Access Control Rules
-
-Access control is checked both in the frontend and backend.
-
-In the frontend:
-- Admin links are hidden from non-admin users.
-- Protected routes prevent unauthenticated users from accessing private pages.
-- Admin routes only allow users with role `admin`.
-
-In the backend:
-- Each private endpoint checks the current user token.
-- Admin endpoints check `role == admin`.
-- Athlete endpoints only return data where `athlete_id == current_user.id`.
-- Coach endpoints only return data where `coach_id == current_user.id`.
-
-## 8. Project Structure
-
-```txt
-fitcoach/
-│
-├── backend/
-│   ├── main.py
-│   ├── database.py
-│   ├── models.py
-│   ├── schemas.py
-│   ├── auth.py
-│   ├── .env.example
-│   └── requirements.txt
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── schemas/
-│   │   ├── context/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── package.json
-│
-├── docs/
-│   ├── user-stories.md
-│   ├── use-case-diagram.drawio
-│   └── erd-rectangle.drawio
-│
-└── README.md
-```
-
-## 9. Minimum Pages / Views
-
-The project includes at least 6 main views:
-
-1. Home
-2. Login / Register
-3. Dashboard
-4. Exercises
-5. Programs
-6. My Workout
-7. Admin Panel
-
-## 10. Phase 1 Status
-
-In phase 1, the initial structure of the project is prepared and the database entities and relationships are designed.
-
-Phase 1 output:
-- Initial frontend and backend folder structure
-- Database models design
-- ERD diagram
-- User stories
-- Use case diagram
-- README file
-
-## 11. How to Run - Backend
+Clone the repository:
 
 ```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
+git clone [your-repository-link]
+cd fitcoach-fullstack
 ```
 
-Backend will run on:
-
-```txt
-http://127.0.0.1:8000
-```
-
-Swagger API documentation:
-
-```txt
-http://127.0.0.1:8000/docs
-```
-
-## 12. How to Run - Frontend
+Run the project with Docker:
 
 ```bash
-cd frontend
-npm install
-npm run dev
+docker compose up --build
 ```
 
-Frontend will run on:
+Frontend:
 
 ```txt
 http://localhost:5173
 ```
 
-## 13. Notes
+Backend Swagger:
 
-This project is intentionally implemented with a simple structure because the goal is to create a working, understandable, and presentable full-stack project within a limited time.
+```txt
+http://localhost:8001/docs
+```
+
+## What I Learned
+
+In this project, I learned how to design a real web application UI in Figma and then implement it with React.
+I also learned how to build authentication APIs with FastAPI, connect the frontend to the backend, and store data in a real database.
+Another important thing I learned was how to run a full-stack project using Docker and Docker Compose.
+
+## Future Improvements
+
+* Add admin panel
+* Add workout plan management
+* Add coach and athlete interaction
+* Add progress tracking
+* Improve dashboard UI
+* Deploy the project online
