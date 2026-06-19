@@ -1,16 +1,11 @@
 from fastapi import APIRouter, Depends
-from .schemas import UserUpdate, UserResponse
-from .services import UserService
+from app.core.security import get_current_user
+from app.modules.users.models import User
+from app.modules.users.schemas import UserOut
 
-router = APIRouter(
-    prefix="/users",
-    tags=["Users"]
-)
+router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: int, service: UserService = Depends()):
-    return service.get_user(user_id)
 
-@router.put("/{user_id}", response_model=UserResponse)
-def update_user(user_id: int, payload: UserUpdate, service: UserService = Depends()):
-    return service.update_user(user_id, payload)
+@router.get("/me", response_model=UserOut)
+def me(current_user: User = Depends(get_current_user)):
+    return current_user

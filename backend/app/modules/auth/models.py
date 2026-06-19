@@ -1,22 +1,16 @@
-from sqlalchemy import Column, String, DateTime, Integer, ForeignKey, Enum
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from app.core.base_model import TimestampMixin
 from app.core.database import Base
-from app.core.base_model import BaseModelMixin
-from app.core.enums import OTPPurpose
 
 
-class OTPCode(Base, BaseModelMixin):
+class OtpCode(TimestampMixin, Base):
     __tablename__ = "otp_codes"
 
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
-    phone = Column(String(15), nullable=False, index=True)
-
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    phone = Column(String(20), index=True, nullable=False)
     code_hash = Column(String(255), nullable=False)
-    purpose = Column(Enum(OTPPurpose), nullable=False)
-
-    expires_at = Column(DateTime, nullable=False)
-    consumed_at = Column(DateTime, nullable=True)
-
-    user = relationship("User", back_populates="otp_codes")
-
+    purpose = Column(String(20), nullable=False)  # signup / login
+    attempts = Column(Integer, default=0)
+    max_attempts = Column(Integer, default=3)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    consumed_at = Column(DateTime(timezone=True), nullable=True)

@@ -1,40 +1,45 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from typing import Literal
+from pydantic import BaseModel, Field
+from app.modules.users.schemas import UserOut
 
-# ---------- Input DTOs ----------
-class SendCodeRequest(BaseModel):
-    phone_number: str = Field(min_length=10, max_length=15)
-    
-class RegisterRequest(BaseModel):
-    first_name: str = Field(min_length=2)
-    last_name: str = Field(min_length=2)
-    username: str = Field(min_length=3, max_length=30)
-    phone_number: str = Field(min_length=10, max_length=15)
-    email: Optional[EmailStr] = None
-    verification_code: str = Field(min_length=4, max_length=6)
 
-class LoginRequest(BaseModel):
-    phone_number: str = Field(min_length=10, max_length=15)
-    verification_code: str = Field(min_length=4, max_length=6)
+IRAN_PHONE_PATTERN = r"^09\d{9}$"
+FULL_NAME_PATTERN = r"^[A-Za-zآ-یءئؤإأۀ\s]+$"
 
-# ---------- Output DTOs ----------
-class TokenResponse(BaseModel):
+
+class RegisterIn(BaseModel):
+    full_name: str = Field(min_length=2, max_length=120, pattern=FULL_NAME_PATTERN)
+    phone: str = Field(min_length=11, max_length=11, pattern=IRAN_PHONE_PATTERN)
+    password: str = Field(min_length=8, max_length=64)
+    role: Literal["athlete", "coach"] = "athlete"
+
+
+class VerifySignupIn(BaseModel):
+    phone: str = Field(min_length=11, max_length=11, pattern=IRAN_PHONE_PATTERN)
+    code: str = Field(min_length=4, max_length=6)
+
+
+class LoginPasswordIn(BaseModel):
+    phone: str = Field(min_length=11, max_length=11, pattern=IRAN_PHONE_PATTERN)
+    password: str = Field(min_length=8, max_length=64)
+
+
+class RequestLoginCodeIn(BaseModel):
+    phone: str = Field(min_length=11, max_length=11, pattern=IRAN_PHONE_PATTERN)
+
+
+class LoginCodeIn(BaseModel):
+    phone: str = Field(min_length=11, max_length=11, pattern=IRAN_PHONE_PATTERN)
+    code: str = Field(min_length=4, max_length=6)
+
+
+class MessageOut(BaseModel):
+    message: str
+    dev_otp: str | None = None
+    phone: str | None = None
+
+
+class TokenOut(BaseModel):
     access_token: str
-    refresh_token: str
     token_type: str = "bearer"
-
-class AuthUserResponse(BaseModel):
-    id: int
-    username: str
-    first_name: str
-    last_name: str
-    phone_number: str
-    email: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-
-# هدف: جلوگیری از نمایش password و کنترل فرایند login/register.
-# اطلاعات حساس نمایش داده نمی‌شود
-# ولیدیشن ایمیل + طول پسورد
-#خروجی مناسب فرانت داخل dashboard
+    user: UserOut

@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    container_name: fitcoach_backend_arch
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=sqlite:////data/fitcoach.db
+      - JWT_SECRET_KEY=fitcoach-dev-secret-change-me
+      - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=120
+      - RETURN_DEV_OTP=true
+    volumes:
+      - ./backend/app:/code/app
+      - backend_data:/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build: ./frontend
+    container_name: fitcoach_frontend_arch
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8001
+    volumes:
+      - ./frontend/src:/app/src
+    depends_on:
+      - backend
+    command: npm run dev -- --host 0.0.0.0
+volumes:
+  backend_data:

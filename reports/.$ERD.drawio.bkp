@@ -1,0 +1,57 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.5.1 Chrome/142.0.7444.265 Electron/39.6.1 Safari/537.36" version="29.5.1">
+  <diagram name="FitCoach ERD Rectangle" id="FitCoach ERD Rectangle">
+    <mxGraphModel dx="2195" dy="435" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="users" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="users&lt;br&gt;- id PK&lt;br&gt;- full_name&lt;br&gt;- phone UNIQUE&lt;br&gt;- hashed_password&lt;br&gt;- role (athlete / coach / admin)&lt;br&gt;- is_active&lt;br&gt;- created_at" vertex="1">
+          <mxGeometry height="150" width="190" x="210" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="athlete_profiles" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="athlete_profiles&lt;br&gt;- id PK&lt;br&gt;- user_id FK -&amp;gt; users.id&lt;br&gt;- height_cm&lt;br&gt;- weight_kg&lt;br&gt;- goal&lt;br&gt;- level&lt;div&gt;- available_days_per_week&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="180" x="-10" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="coach_profiles" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="coach_profiles&#xa;- id PK&#xa;- user_id FK -&gt; users.id&#xa;- specialty&#xa;- experience_years&#xa;- bio" vertex="1">
+          <mxGeometry height="120" width="180" x="430" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="exercises" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#6a00ff, #b190e0);strokeColor=#3700CC;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="exercises&#xa;- id PK&#xa;- name&#xa;- target_muscle&#xa;- description" vertex="1">
+          <mxGeometry height="100" width="250" x="560" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="programs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="programs&lt;br&gt;- id PK&lt;br&gt;- title&lt;br&gt;- description&lt;br&gt;- coach_id FK -&amp;gt; users.id&lt;br&gt;- athlete_id FK -&amp;gt; users.id&lt;br&gt;- duration_weeks&lt;div&gt;-&amp;nbsp;days_per_week (days_per_week = athlete_profiles.available_days_per_week)&lt;br&gt;- created_at&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="450" x="460" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="program_exercises" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#7500FF, #a460f0);strokeColor=#3700CC;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="program_exercises&lt;br&gt;- id PK&lt;br&gt;- program_id FK -&amp;gt; programs.id&lt;br&gt;- exercise_id FK -&amp;gt; exercises.id&lt;br&gt;- day_number (day_number &amp;lt;= programs.days_per_week)&lt;br&gt;- sets&lt;br&gt;- reps&lt;br&gt;- note" vertex="1">
+          <mxGeometry height="150" width="340" x="515" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="workout_logs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d80073;strokeColor=#A50040;fontSize=12;align=left;verticalAlign=top;spacing=8;strokeWidth=2;fontColor=#ffffff;" value="workout_logs&lt;br&gt;- PK:&lt;br&gt;(&lt;br&gt; athlete_id,&lt;br&gt; program_id,&lt;br&gt; week_number&lt;br&gt;)&lt;br&gt;- athlete_id FK -&amp;gt; users.id&lt;br&gt;- program_id FK -&amp;gt; program.id&lt;br&gt;-week-number(week_number = programs.duration_weeks)&lt;div&gt;- completed&lt;/div&gt;&lt;div&gt;-completed-at&lt;br&gt;- note&lt;/div&gt;" vertex="1">
+          <mxGeometry height="230" width="430" x="-230" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" edge="1" parent="1" source="users" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="athlete_profiles" value="1 to 0..1&#xa;has athlete profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" edge="1" parent="1" source="users" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="coach_profiles" value="1 to 0..1&#xa;has coach profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" edge="1" parent="1" source="users" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="programs" value="coach: 1 to N&#xa;creates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" edge="1" parent="1" source="users" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="programs" value="athlete: 1 to N&lt;br&gt;receives/&lt;br&gt;coach : 1 to N creates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" edge="1" parent="1" source="programs" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="program_exercises" value="1 to N&#xa;contains">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" edge="1" parent="1" source="exercises" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="program_exercises" value="1 to N&#xa;used in">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" edge="1" parent="1" source="users" style="endArrow=none;html=1;rounded=0;strokeWidth=2;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.014;exitY=0.809;exitDx=0;exitDy=0;exitPerimeter=0;" target="workout_logs" value="athlete: 1 to N&#xa;records">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="360" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r8" edge="1" parent="1" source="programs" style="endArrow=none;html=1;rounded=0;strokeWidth=2;" target="workout_logs" value="1 to N&#xa;has logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
