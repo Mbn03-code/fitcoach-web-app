@@ -6,7 +6,7 @@ A full-stack fitness coaching web application with authentication, landing page,
 
 Live Demo: Coming soon
 GitHub Repo: Coming soon
-Figma Design: [Add your Figma link here]
+Figma Design:(https://www.figma.com/design/fpBKnJkWnGftaRjCv7zq18/web-exercise?node-id=0-1&p=f&t=Zpt06bfpS9wApEVX-0)
 
 ## Screenshots
 
