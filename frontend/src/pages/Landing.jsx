@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Dumbbell, FileText, Menu, Play, Star, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 import { publicApi } from '../api/publicApi.js';
 import TopNav from '../components/ui/TopNav.jsx';
 
 const statIcons = { users: Users, play: Play, star: Star };
 
 export default function Landing() {
+  const { isAuthenticated } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -53,8 +55,8 @@ export default function Landing() {
             </h1>
             <p>{page.hero.subtitle}</p>
             <div className="hero-actions">
-              <Link to="/register" className="btn-green">Build Your Plan <ArrowRight size={20} /></Link>
-              <button className="btn-outline"><Play size={18} /> Watch Intro</button>
+              <Link to={isAuthenticated ? "/coaches" : "/register"} className="btn-green">Build Your Plan <ArrowRight size={20} /></Link>
+              <Link className="btn-outline" to="/exercises"><Play size={18} /> Watch Intro</Link>
             </div>
           </div>
           <div className="hero-visual"><div className="runner-silhouette" /></div>
@@ -78,7 +80,7 @@ export default function Landing() {
           <div>
             <h2>Coaching that fits<br />your real life.</h2>
             <p>Get a trainer-led plan without complicated dashboards, noisy cards or pressure.</p>
-            <Link to="/register" className="btn-green small">Find Coach <ArrowRight size={18} /></Link>
+            <Link to={isAuthenticated ? "/coaches" : "/register"} className="btn-green small">Find Coach <ArrowRight size={18} /></Link>
           </div>
         </div>
       </section>
@@ -88,7 +90,14 @@ export default function Landing() {
         {loading && <p className="state-text">Loading workouts from backend...</p>}
         {error && <p className="state-text error">Backend fetch failed: {error}</p>}
         <div className="workout-grid">
-          {page.categories.map((category) => <article className="workout-card" key={category.title}><div className={`workout-img ${category.image_hint}`} /><h3>{category.title}</h3><p>{category.subtitle}</p></article>)}
+          {page.categories.map((category) => (
+            <Link className="workout-card" key={category.title} to={`/exercises?category=${category.image_hint}`}>
+              <div className={`workout-img ${category.image_hint}`} />
+              <h3>{category.title}</h3>
+              <p>{category.subtitle}</p>
+              <span className="workout-card-link">Open exercises <ArrowRight size={15} /></span>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -113,9 +122,9 @@ export default function Landing() {
       <footer className="landing-footer">
         <div className="footer-brand"><Dumbbell /> <strong>Futurea</strong><p>Your fitness journey, simplified. Built for real life.</p></div>
         <div className="footer-cols">
-          <div><h4>APP</h4><a href="#workouts">Workouts</a><a href="#coaches">Coaches</a><a href="/register">Pricing</a></div>
-          <div><h4>COMPANY</h4><a href="#why">About</a><a href="#stories">Stories</a><a href="/login">Contact</a></div>
-          <div><h4>LEGAL</h4><a href="/login">Privacy</a><a href="/login">Terms</a><a href="/login">Support</a></div>
+          <div><h4>APP</h4><a href="#workouts">Workouts</a><a href="#coaches">Coaches</a><Link to={isAuthenticated ? "/dashboard" : "/register"}>Pricing</Link></div>
+          <div><h4>COMPANY</h4><a href="#why">About</a><a href="#stories">Stories</a><Link to={isAuthenticated ? "/dashboard" : "/login"}>Contact</Link></div>
+          <div><h4>LEGAL</h4><Link to="/dashboard">Privacy</Link><Link to="/dashboard">Terms</Link><Link to="/dashboard">Support</Link></div>
         </div>
         <small>© 2026 Futurea. All rights reserved.</small>
       </footer>

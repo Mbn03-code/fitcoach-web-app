@@ -1,25 +1,53 @@
+import base64
 import hashlib
+import hmac
+import os
 import random
 from datetime import datetime, timedelta, timezone
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError, jwt
 from sqlalchemy.orm import Session
+
 from app.core.config import settings
 from app.core.database import get_db
 from app.modules.users.models import User
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 bearer_scheme = HTTPBearer(auto_error=False)
+
+PASSWORD_ITERATIONS = 260_000
 
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    salt = os.urandom(16)
+    key = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt,
+        PASSWORD_ITERATIONS,
+    )
+    salt_b64 = base64.urlsafe_b64encode(salt).decode("utf-8")
+    key_b64 = base64.urlsafe_b64encode(key).decode("utf-8")
+    return f"pbkdf2_sha256${PASSWORD_ITERATIONS}${salt_b64}${key_b64}"
 
 
 def verify_password(plain_password: str, password_hash: str) -> bool:
-    return pwd_context.verify(plain_password, password_hash)
+    try:
+        scheme, iterations, salt_b64, key_b64 = password_hash.split("$", 3)
+        if scheme != "pbkdf2_sha256":
+            return False
+        salt = base64.urlsafe_b64decode(salt_b64.encode("utf-8"))
+        saved_key = base64.urlsafe_b64decode(key_b64.encode("utf-8"))
+        new_key = hashlib.pbkdf2_hmac(
+            "sha256",
+            plain_password.encode("utf-8"),
+            salt,
+            int(iterations),
+        )
+        return hmac.compare_digest(new_key, saved_key)
+    except Exception:
+        return False
 
 
 def generate_otp_code() -> str:

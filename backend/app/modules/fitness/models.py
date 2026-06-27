@@ -69,3 +69,14 @@ class Article(TimestampMixin, Base):
     __tablename__ = "articles"
     title = Column(String(160), nullable=False)
     read_time = Column(String(20), nullable=False)
+    slug = Column(String(80), unique=True, index=True, nullable=True)
+    summary = Column(String(300), nullable=True)
+    content = Column(Text, nullable=True)
+
+
+class CoachRequest(TimestampMixin, Base):
+    __tablename__ = "coach_requests"
+    athlete_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    coach_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    status = Column(String(30), nullable=False, default="pending")
+    message = Column(Text, nullable=True)

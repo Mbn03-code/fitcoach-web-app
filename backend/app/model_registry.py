@@ -4,6 +4,7 @@ from app.modules.fitness.models import (  # noqa
     Article,
     AthleteProfile,
     CoachProfile,
+    CoachRequest,
     Exercise,
     Program,
     ProgramExercise,

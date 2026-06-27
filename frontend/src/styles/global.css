@@ -68,3 +68,6 @@ button { cursor: pointer; }
   box-shadow: 0 18px 34px rgba(57,217,138,.18);
 }
 .profile-back:hover { color: #75ffb5; }
+
+/* Keep English UI aligned correctly even when the browser/system language is Persian. */
+html, body, #root { direction: ltr; }
